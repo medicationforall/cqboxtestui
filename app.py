@@ -13,11 +13,11 @@
 # limitations under the License.
 
 import streamlit as st
-from controls.sidebar import make_sidebar
-from controls.camera import make_camera_controls
-from controls.parameters import make_parameter_controls
-from controls.file import make_file_controls
-from controls.model import make_model_controls
+from sidebar import make_sidebar
+from camera import make_camera_controls
+from parameters import make_parameter_controls
+from fileControls import make_file_controls
+from model import make_model_controls
 
 def __make_ui():
     tab1, tab2, tab3 = st.tabs(["Parameters", "Camera", "File"])
