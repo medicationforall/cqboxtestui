@@ -21,14 +21,11 @@ from controls.model import make_model_controls
 
 def __make_ui():
     tab1, tab2, tab3 = st.tabs(["Parameters", "Camera", "File"])
-
     with tab1:
         col1, col2, col3 = st.columns(3)
         model_parameters = make_parameter_controls()
-
     with tab2:
         camera_controls = make_camera_controls()
-
     with tab3:
         file_controls = make_file_controls()
 
