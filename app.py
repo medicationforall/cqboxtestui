@@ -16,26 +16,35 @@ import streamlit as st
 import cadquery as cq
 import os
 import time
-import base64
+from sidebar import sidebar
 
-def __render_svg(svg):
-    """Renders the given svg string."""
-    b64 = base64.b64encode(svg.encode('utf-8')).decode("utf-8")
-    html = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
-    st.write(html, unsafe_allow_html=True)
+EXPORT_NAME = 'model'
+PREVIEW_NAME = 'preview.svg'
 
-def __model(length, width, height,axis1,axis2,axis3, focus, color1, color2):
+def __model(
+    length, 
+    width, 
+    height,
+    axis1,
+    axis2,
+    axis3, 
+    focus, 
+    color1, 
+    color2, 
+    download_name, 
+    export_type
+):
     start = time.time()
-    with st.spinner('Wait for it...'):
+    with st.spinner('generating model..'):
         box = cq.Workplane("XY").box(length,width,height)
-        cq.exporters.export(box,"test.stl")
+        cq.exporters.export(box,f'{EXPORT_NAME}.{export_type}')
 
         hex_1 = color1.lstrip('#')
         rgb_1 = tuple(int(hex_1[i:i+2], 16) for i in (0, 2, 4))
 
         hex_2 = color2.lstrip('#')
         rgb_2 = tuple(int(hex_2[i:i+2], 16) for i in (0, 2, 4))
-        cq.exporters.export(box, "box.svg", opt={
+        cq.exporters.export(box, PREVIEW_NAME, opt={
             "projectionDir": (axis1, axis2, axis3),
             "showAxes": True,
             "focus": focus,
@@ -46,24 +55,24 @@ def __model(length, width, height,axis1,axis2,axis3, focus, color1, color2):
         end = time.time()
 
         st.write("Preview:")
-        with open('box.svg', 'r') as f:
-            __render_svg(f.read())
+        st.image(PREVIEW_NAME)
 
-        if f'test.stl' not in os.listdir():
+
+        if f'{EXPORT_NAME}.{export_type}' not in os.listdir():
             st.error('The program was not able to generate the mesh.', icon="🚨")
         else:
-            with open('test.stl', "rb") as file:
+            with open(f'{EXPORT_NAME}.{export_type}', "rb") as file:
                 btn = st.download_button(
-                        label=f"Download STL",
+                        label=f"Download {export_type}",
                         data=file,
-                        file_name=f'test.stl',
-                        mime=f"model/stl"
+                        file_name=f'{download_name}.{export_type}',
+                        mime=f"model/{export_type}"
                     )
             st.success(f'Rendered in {int(end-start)} seconds', icon="✅")
 
 
 def __make_ui():
-    tab1, tab2 = st.tabs(["Parameters", "Camera"])
+    tab1, tab2, tab3 = st.tabs(["Parameters", "Camera", "Meta"])
 
     with tab1:
         col1, col2, col3 = st.columns(3)
@@ -85,6 +94,13 @@ def __make_ui():
 
         focus = st.number_input("Focus",step=1, value=50)
 
+    with tab3:
+        col1, col2 = st.columns(2)
+        with col1:
+            download_name = st.text_input('File Name','model')
+        with col2:
+            export_type = st.selectbox("File type",('stl','step'))
+
     col1, col2, col3= st.columns(3)
     with col1:
         render = st.checkbox('Render:', True)
@@ -94,13 +110,7 @@ def __make_ui():
         color2 = st.color_picker('Secondary Color', '#0011f9', disabled=not render)
 
     if render:
-        __model(length, width, height,axis1,axis2,axis3, focus, color1, color2)
-
-def __make_sidebar():
-    with st.sidebar:
-        st.markdown("![](https://miniforall.com/image/patreon.png) [Patreon](https://www.patreon.com/medicationforall)")
-        st.markdown("[Mini For All](https://miniforall.com)")
-        st.markdown("[Github Code](https://github.com/medicationforall/cqboxtestui)")
+        __model(length, width, height,axis1,axis2,axis3, focus, color1, color2, download_name, export_type)
 
 
 if __name__ == "__main__":
@@ -111,4 +121,4 @@ if __name__ == "__main__":
 
     st.title('CadQuery Box Test')
     __make_ui()
-    __make_sidebar()
+    sidebar()
