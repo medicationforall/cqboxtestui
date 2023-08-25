@@ -102,8 +102,6 @@ def __make_sidebar():
         st.markdown("[Mini For All](https://miniforall.com)")
         st.markdown("[Github Code](https://github.com/medicationforall/cqboxtestui)")
 
-        st.markdown("Written by James Adams")
-
 
 if __name__ == "__main__":
     st.set_page_config(
