@@ -19,7 +19,7 @@ from  controls import (
     make_sidebar, 
     make_parameter_controls, 
     make_model_controls,
-    make_file_controls
+    make_file_controls,
     make_camera_controls
 )
 
