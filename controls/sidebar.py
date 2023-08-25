@@ -1,6 +1,6 @@
 import streamlit as st
 
-def sidebar():
+def make_sidebar():
     with st.sidebar:
         st.markdown("![](https://miniforall.com/image/patreon.png) [Patreon](https://www.patreon.com/medicationforall)")
         st.markdown("[Mini For All](https://miniforall.com)")
