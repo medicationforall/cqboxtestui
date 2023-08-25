@@ -15,7 +15,7 @@
 #--------------------  
 
 import streamlit as st
-from  controls import (
+from controls import (
     make_sidebar, 
     make_parameter_controls, 
     make_model_controls,
