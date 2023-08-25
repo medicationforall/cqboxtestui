@@ -2,7 +2,7 @@
 
 ![](01.png)
 
-View the demo as a [Streamlit App](cqboxtest.streamlit.app)
+View the demo as a [Streamlit App](https://cqboxtest.streamlit.app/)
 
 ## To run Locally
 
